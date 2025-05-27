@@ -29,6 +29,37 @@ export default function Home() {
     setResponses((prev) => ({ ...prev, [name]: value }));
   };
 
+  "use client";
+
+import { useState } from "react";
+import type { ChangeEvent } from "react";
+
+export default function Home() {
+  const [submitted, setSubmitted] = useState(false);
+  const [confirming, setConfirming] = useState(false);
+  const [userInfo, setUserInfo] = useState<{ name: string; email: string }>({ name: '', email: '' });
+  const [referralCode, setReferralCode] = useState<string>('');
+  const [persona, setPersona] = useState<string>('');
+  const [responses, setResponses] = useState<Record<string, string>>({});
+  const [error, setError] = useState<string>('');
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    if (name === 'name' || name === 'email') {
+      setUserInfo({ ...userInfo, [name]: value });
+    } else if (name === 'referralCode') {
+      setReferralCode(value);
+    } else if (name === 'persona') {
+      setPersona(value);
+    } else {
+      setResponses({ ...responses, [name]: value });
+    }
+  };
+
+  const handleResponseChange = (name: string, value: string) => {
+    setResponses((prev) => ({ ...prev, [name]: value }));
+  };
+
   const handleSubmit = async () => {
     const formData = {
       name: userInfo.name,
@@ -46,6 +77,7 @@ export default function Home() {
       });
 
       const result = await response.json();
+      console.log("Server response:", result); // 🔍 Step 1: Log the backend response
 
       if (!response.ok || result.status === "error") {
         throw new Error(result.message || "Submission failed");
