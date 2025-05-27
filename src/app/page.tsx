@@ -13,6 +13,8 @@ export default function Home() {
   const [responses, setResponses] = useState<Record<string, string>>({});
   const [error, setError] = useState<string>('');
 
+  const allowedReferralCodes = ["312486", "945201", "228409", "574193", "807612"];
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     if (name === 'name' || name === 'email') {
@@ -38,6 +40,10 @@ export default function Home() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(userInfo.email)) {
       setError("Please enter a valid email address.");
+      return false;
+    }
+    if (!allowedReferralCodes.includes(referralCode)) {
+      setError("Invalid referral code. Please enter a valid one.");
       return false;
     }
     return true;
@@ -79,7 +85,7 @@ export default function Home() {
       setLoading(false);
     }
   };
-
+  
   const allQuestions = () => {
     switch (persona) {
       case "Student (Elementary)":
