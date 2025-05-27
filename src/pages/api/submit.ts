@@ -6,17 +6,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const googleScriptURL = "https://script.google.com/macros/s/AKfycbwmZ0px1ELger-V5cNGHQkmqV-8RKqUaHzmoGa1Qf82YufKBLX_575ZKNK-31deDi_-VQ/exec";
+    const googleScriptURL =
+      "https://script.google.com/macros/s/AKfycbwmZ0px1ELger-V5cNGHQkmqV-8RKqUaHzmoGa1Qf82YufKBLX_575ZKNK-31deDi_-VQ/exec";
+
+    const { name = "", email = "", referralCode = "", persona = "", responses = {} } = req.body;
 
     const params = new URLSearchParams({
-      name: req.body.name || '',
-      email: req.body.email || '',
-      referralCode: req.body.referralCode || '',
-      persona: req.body.persona || '',
-      responses: JSON.stringify(req.body.responses || {})
+      name,
+      email,
+      referralCode,
+      persona,
+      responses: JSON.stringify(responses),
     });
 
-    console.log("Forwarding to Google Apps Script with:", params.toString());
+    console.log("🟡 Submitting to Google Script with:", params.toString());
 
     const googleRes = await fetch(googleScriptURL, {
       method: "POST",
@@ -26,21 +29,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       body: params.toString(),
     });
 
-    const resultText = await googleRes.text(); 
-
-    console.log("Google Apps Script response text:", resultText);
+    const rawText = await googleRes.text();
+    console.log("🟢 Raw response from Google Apps Script:", rawText);
 
     let parsed;
     try {
-      parsed = JSON.parse(resultText);
-    } catch (e) {
-      console.error("Failed to parse JSON from Apps Script:", resultText);
-      return res.status(500).json({ status: "error", message: "Invalid response from Google Script" });
+      parsed = JSON.parse(rawText);
+    } catch (err) {
+      console.error("🔴 JSON parse error from Google Script response:", err);
+      return res.status(502).json({ status: "error", message: "Bad response format from Google Script", rawText });
     }
 
     return res.status(200).json(parsed);
-  } catch (error) {
-    console.error("Proxy error:", error);
-    return res.status(500).json({ error: "Proxy error", details: error.message });
+  } catch (err: any) {
+    console.error("🔴 Proxy submission error:", err.message);
+    return res.status(500).json({ status: "error", message: "Internal server error", error: err.message });
   }
 }
