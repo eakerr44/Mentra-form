@@ -9,24 +9,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const googleScriptURL =
       "https://script.google.com/macros/s/AKfycbwmZ0px1ELger-V5cNGHQkmqV-8RKqUaHzmoGa1Qf82YufKBLX_575ZKNK-31deDi_-VQ/exec";
 
-    const { name = "", email = "", referralCode = "", persona = "", responses = {} } = req.body;
+    const body = JSON.stringify(req.body);
 
-    const params = new URLSearchParams({
-      name,
-      email,
-      referralCode,
-      persona,
-      responses: JSON.stringify(responses),
-    });
-
-    console.log("🟡 Submitting to Google Script with:", params.toString());
+    console.log("🟡 Submitting to Google Script with:", body);
 
     const googleRes = await fetch(googleScriptURL, {
       method: "POST",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type": "application/json",
       },
-      body: params.toString(),
+      body,
     });
 
     const rawText = await googleRes.text();
