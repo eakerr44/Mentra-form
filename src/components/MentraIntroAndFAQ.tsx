@@ -105,7 +105,7 @@ export default function MentraIntroAndFAQ({ persona }: { persona: string }) {
           <div className="text-sm text-gray-700">
             <button
               onClick={() => setFaqCollapsed(false)}
-              className="bg-gray-100 border border-gray-300 px-3 py-1 rounded hover:bg-gray-200 transition"
+              className="bg-white border border-gray-400 px-3 py-1 rounded text-gray-800 hover:bg-gray-100 transition-shadow hover:shadow-sm"
             >
               ❔ Show FAQ
             </button>
