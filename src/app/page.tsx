@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import type { ChangeEvent } from "react";
 
 export default function Home() {
@@ -25,36 +24,35 @@ export default function Home() {
     }
   };
 
-const handleSubmit = async () => {
-  const formData = {
-    name: userInfo.name,
-    email: userInfo.email,
-    referralCode,
-    persona,
-    responses,
+  const handleSubmit = async () => {
+    const formData = {
+      name: userInfo.name,
+      email: userInfo.email,
+      referralCode,
+      persona,
+      responses,
+    };
+
+    try {
+      const response = await fetch("https://script.google.com/macros/s/AKfycbwmZ0px1ELger-V5cNGHQkmqV-8RKqUaHzmoGa1Qf82YufKBLX_575ZKNK-31deDi_-VQ/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) throw new Error("Submission failed");
+
+      setSubmitted(true);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
-
-  try {
-    const response = await fetch("https://script.google.com/macros/s/AKfycbwmZ0px1ELger-V5cNGHQkmqV-8RKqUaHzmoGa1Qf82YufKBLX_575ZKNK-31deDi_-VQ/exec", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
-
-    if (!response.ok) throw new Error("Submission failed");
-
-    setSubmitted(true);
-  } catch (error) {
-    console.error("Error submitting form:", error);
-  }
-};
-
 
   const allQuestions = () => {
     switch (persona) {
       case "Student (Elementary)":
         return [
-          { name: "funOrFrustrating", label: "What makes learning fun or frustrating for you?", tip: "Think about a time when you really liked or didn’t like learning something. What made it that way?" },
+          { name: "funOrFrustrating", label: "What makes learning fun or frustrating for you?", tip: "Think about a time when you really liked or didn&apos;t like learning something. What made it that way?" },
           { name: "helpWhenTricky", label: "What helps you learn when something is tricky?", tip: "Tell us what makes tough things easier for you—like when reading or solving a problem gets hard." },
           { name: "problemSolved", label: "Tell us about a time you solved a problem. What helped?", tip: "Think about when you figured something out. Who or what helped you?" },
           { name: "outOfSchoolLearning", label: "What do you like learning about outside of school?", tip: "This could be a hobby, a game, a subject, or anything that makes you curious." },
@@ -63,26 +61,26 @@ const handleSubmit = async () => {
       case "Student (Middle/High)":
         return [
           { name: "getStuck", label: "What usually causes you to get stuck when learning something new?", tip: "Share a moment when you struggled—was it confusion, boredom, or something else?" },
-          { name: "aiFeedbackFeel", label: "What would make feedback from an AI feel helpful instead of annoying?", tip: "Describe what kind of support you’d trust from a digital helper." },
+          { name: "aiFeedbackFeel", label: "What would make feedback from an AI feel helpful instead of annoying?", tip: "Describe what kind of support you&apos;d trust from a digital helper." },
           { name: "failureGrowth", label: "Tell us about a time when failure helped you grow.", tip: "Think of a time you messed up, but learned something important." },
           { name: "trustAI", label: "What would make you trust an AI companion in school?", tip: "Consider what would help you feel safe and heard." },
-          { name: "goalMotivation", label: "What’s a goal you care about and how do you stay motivated?", tip: "Share a dream or challenge you’re working on and what keeps you going." }
+          { name: "goalMotivation", label: "What&apos;s a goal you care about and how do you stay motivated?", tip: "Share a dream or challenge you&apos;re working on and what keeps you going." }
         ];
       case "Parent":
         return [
-          { name: "schoolWish", label: "What’s something you wish schools knew about how your child learns?", tip: "Describe something personal or specific about how your child thrives or struggles." },
+          { name: "schoolWish", label: "What&apos;s something you wish schools knew about how your child learns?", tip: "Describe something personal or specific about how your child thrives or struggles." },
           { name: "aiConfidence", label: "What would give you confidence in how AI is used to support your child?", tip: "Mention what transparency, oversight, or control would matter to you." },
-          { name: "loopWithChild", label: "How do you currently stay in the loop with your child’s learning or mood?", tip: "Think about what’s working or not in how you stay informed." },
-          { name: "easierSupport", label: "What would make it easier to support your child’s learning journey?", tip: "Imagine what tools or communication might reduce stress or improve involvement." },
+          { name: "loopWithChild", label: "How do you currently stay in the loop with your child&apos;s learning or mood?", tip: "Think about what&apos;s working or not in how you stay informed." },
+          { name: "easierSupport", label: "What would make it easier to support your child&apos;s learning journey?", tip: "Imagine what tools or communication might reduce stress or improve involvement." },
           { name: "aiHopes", label: "What are your biggest hopes (or worries) about AI in education?", tip: "Share your dreams—or concerns—for the future of learning." }
         ];
       case "Educator":
         return [
-          { name: "studentNeeds", label: "What are the hardest parts of understanding your students’ needs today?", tip: "Reflect on what data or behaviors are hard to interpret or catch in time." },
+          { name: "studentNeeds", label: "What are the hardest parts of understanding your students&apos; needs today?", tip: "Reflect on what data or behaviors are hard to interpret or catch in time." },
           { name: "aiSupportTool", label: "What would make AI a supportive tool instead of a burden?", tip: "Think about how AI could ease your workload or enhance learning—not complicate it." },
           { name: "emotionPrivacy", label: "How would you like to stay informed about student emotion or motivation without breaching privacy?", tip: "What would respectful, useful insight look like to you?" },
           { name: "alignWithStakeholders", label: "What would help you align with parents and students using AI tools like Mentra?", tip: "Share ideas for collaboration or clear communication." },
-          { name: "teachingFeature", label: "What’s a feature that could truly improve your teaching experience?", tip: "Describe a pain point and what would solve it." }
+          { name: "teachingFeature", label: "What&apos;s a feature that could truly improve your teaching experience?", tip: "Describe a pain point and what would solve it." }
         ];
       default:
         return [];
@@ -143,9 +141,9 @@ const handleSubmit = async () => {
     return (
       <div className="max-w-2xl mx-auto p-6 space-y-6">
         <h1 className="text-2xl font-bold text-green-600">🎉 Thank you for your feedback!</h1>
-        <p className="text-gray-700">Your answers have been recorded. We'll send you more info soon.</p>
+        <p className="text-gray-700">Your answers have been recorded. We&apos;ll send you more info soon.</p>
         <hr className="my-4" />
-        <p className="text-sm text-muted-foreground">If you have any questions, just reply to the email we send. We're building Mentra together—thank you for your voice. ❤️</p>
+        <p className="text-sm text-muted-foreground">If you have any questions, just reply to the email we send. We&apos;re building Mentra together—thank you for your voice. ❤️</p>
       </div>
     );
   }
