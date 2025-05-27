@@ -52,20 +52,20 @@ export default function Home() {
   const handleSubmit = async () => {
     if (!validateForm()) return;
 
-    const formData = {
+    const formData = new URLSearchParams({
       name: userInfo.name,
       email: userInfo.email,
       referralCode,
       persona,
-      responses,
-    };
+      responses: JSON.stringify(responses),
+    }).toString();
 
     setLoading(true);
     try {
-      const response = await fetch("/api/submit", {
+      const response = await fetch("https://script.google.com/macros/s/AKfycbwmZ0px1ELger-V5cNGHQkmqV-8RKqUaHzmoGa1Qf82YufKBLX_575ZKNK-31deDi_-VQ/exec", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: formData,
       });
 
       const result = await response.json();
@@ -85,7 +85,6 @@ export default function Home() {
       setLoading(false);
     }
   };
-  
   const allQuestions = () => {
     switch (persona) {
       case "Student (Elementary)":
