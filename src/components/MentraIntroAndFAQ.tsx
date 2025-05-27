@@ -19,11 +19,12 @@ export default function MentraIntroAndFAQ({ persona }: { persona: string }) {
           <div className="bg-blue-50 border border-blue-200 p-4 rounded-md relative">
             <button
               onClick={() => setIntroCollapsed(true)}
-              className="absolute top-4 right-4 text-sm text-blue-600 hover:underline"
+              className="absolute top-2 right-2 text-sm text-blue-600 hover:underline"
             >
               Collapse
             </button>
-            <h2 className="text-lg font-semibold text-blue-800">Meet Mentra — Your Partner in Growth</h2>
+            <div className="mb-4"></div>
+<h2 className="text-lg font-semibold text-blue-800">Meet Mentra — Your Partner in Growth</h2>
             <p className="text-sm text-blue-700 mt-2">
               Mentra is a trusted space built for schools to support meaningful student growth. Whether you&rsquo;re a student building confidence, a teacher guiding learning, or a parent supporting progress, Mentra helps uncover what matters most &mdash; through reflection, resilience, and connection &mdash; all without pressure, judgment, or noise.</p>
             <p className="text-sm text-blue-700 mt-4">
@@ -54,11 +55,12 @@ export default function MentraIntroAndFAQ({ persona }: { persona: string }) {
           <div className="bg-gray-50 border border-gray-200 p-4 rounded-md relative">
             <button
               onClick={() => setFaqCollapsed(true)}
-              className="absolute top-4 right-4 text-sm text-gray-600 hover:underline"
+              className="absolute top-2 right-2 text-sm text-gray-600 hover:underline"
             >
               Collapse
             </button>
-            <h2 className="text-lg font-semibold text-gray-800">❓ Frequently Asked Questions</h2>
+            <div className="mb-4"></div>
+<h2 className="text-lg font-semibold text-gray-800">❓ Frequently Asked Questions</h2>
 
             <div className="mt-4">
               <h3 className="font-semibold text-gray-700">About This Survey</h3>
