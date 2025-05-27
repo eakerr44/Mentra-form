@@ -18,7 +18,7 @@ export default function Home() {
   const [error, setError] = useState<string>('');
 
   useEffect(() => {
-    const ref = searchParams.get("ref");
+    const ref = searchParams?.get("ref");
     if (ref) {
       setReferralCode(ref);
     }
@@ -266,7 +266,7 @@ export default function Home() {
               </div>
             </div>
           )}
-        </>
+        </>sw
       )}
     </div>
   );
