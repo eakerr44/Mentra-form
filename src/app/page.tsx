@@ -4,11 +4,10 @@ import { useState, useEffect } from "react";
 import type { ChangeEvent } from "react";
 import MentraIntroAndFAQ from "@/components/MentraIntroAndFAQ";
 
-import { useSearchParams } from "next/navigation";
+
 
 export default function Home() {
-  const searchParams = useSearchParams();
-  const [submitted, setSubmitted] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userInfo, setUserInfo] = useState<{ name: string; email: string }>({ name: '', email: '' });
@@ -18,11 +17,14 @@ export default function Home() {
   const [error, setError] = useState<string>('');
 
   useEffect(() => {
-    const ref = searchParams?.get("ref");
-    if (ref) {
-      setReferralCode(ref);
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const ref = params.get("ref");
+      if (ref) {
+        setReferralCode(ref);
+      }
     }
-  }, [searchParams]);
+  }, []);
 
   const allowedReferralCodes = ["312486", "945201", "228409", "574193", "807612"];
 
