@@ -30,6 +30,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     const rawText = await googleRes.text();
+
+    // Additional safety: ensure response starts with { to be parsed
+    if (!rawText.trim().startsWith("{")) {
+      console.error("🔴 Response not valid JSON:", rawText);
+      return res.status(502).json({ status: "error", message: "Invalid JSON response from Google Script", raw: rawText });
+    }
     console.log("🟢 Raw response from Google Apps Script:", rawText);
 
     let parsed;
