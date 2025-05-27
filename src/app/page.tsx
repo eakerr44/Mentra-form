@@ -49,7 +49,7 @@ export default function Home() {
 
   const validateForm = () => {
     if (!userInfo.name || !userInfo.email || !referralCode || !persona) {
-      setError("Please fill out all required fields.");
+      setError("Please fill out all required fields, if your Referral Code is blank please use the invitation link you were provided.");
       return false;
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
