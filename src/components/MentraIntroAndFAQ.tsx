@@ -25,7 +25,7 @@ export default function MentraIntroAndFAQ({ persona }: { persona: string }) {
             </button>
             <h2 className="text-lg font-semibold text-blue-800">Meet Mentra — Your Partner in Growth</h2>
             <p className="text-sm text-blue-700 mt-2">
-              Mentra is a trusted space built for schools to support meaningful student growth. Whether you're a student building confidence, a teacher guiding learning, or a parent supporting progress, Mentra helps uncover what matters most — through reflection, resilience, and connection — all without pressure, judgment, or noise.
+              Mentra is a trusted space built for schools to support meaningful student growth. Whether you&rsquo;re a student building confidence, a teacher guiding learning, or a parent supporting progress, Mentra helps uncover what matters most &mdash; through reflection, resilience, and connection &mdash; all without pressure, judgment, or noise.
               Mentra is designed to help students grow through controlled struggle, not shortcuts, supporting the kind of self-awareness and perseverance that comes from working through problems yourself while also preparing them to collaborate with AI responsibly in the world ahead.
             </p>
             <hr className="my-4 border-t border-blue-200" />
@@ -82,7 +82,7 @@ export default function MentraIntroAndFAQ({ persona }: { persona: string }) {
               <div className="mt-2 space-y-3 text-sm text-gray-800">
                 <div>
                   <strong>Does Mentra replace teachers or parents?</strong>
-                  <p>No. Mentra is a co-pilot — it supports teachers and parents by surfacing reflection and growth insights.</p>
+                  <p>No. Mentra is a co-pilot &mdash; it supports teachers and parents by surfacing reflection and growth insights. It helps students build the confidence and awareness that comes from working through challenges themselves, while also preparing them to use AI responsibly as part of their future.</p>
                 </div>
                 <div>
                   <strong>What is journaling in Mentra?</strong>
@@ -90,11 +90,11 @@ export default function MentraIntroAndFAQ({ persona }: { persona: string }) {
                 </div>
                 <div>
                   <strong>Can parents or teachers read student journals?</strong>
-                  <p>Only if the student shares them. By default, everything is private. Mentra only shares patterns—not raw content.</p>
+                  <p>Only if the student shares them. By default, everything is private. Mentra only shares patterns&mdash;not raw content.</p>
                 </div>
                 <div>
                   <strong>What does Mentra do with emotional data?</strong>
-                  <p>Mentra helps identify emotional and learning trends to support student development. Nothing is shared without consent.</p>
+                  <p>Mentra uses emotional and learning signals to support student development &mdash; not replace it. It identifies patterns that help students grow through challenge and reflection, while also building fluency in responsible AI collaboration. Nothing is shared without consent.</p>
                 </div>
                 <div>
                   <strong>What does it mean that Mentra “graduates” with students?</strong>
@@ -117,4 +117,3 @@ export default function MentraIntroAndFAQ({ persona }: { persona: string }) {
     </div>
   );
 }
-
