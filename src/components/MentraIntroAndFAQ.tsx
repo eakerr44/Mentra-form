@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 export default function MentraIntroAndFAQ({ persona }: { persona: string }) {
   const [introCollapsed, setIntroCollapsed] = useState(false);
-  const [faqCollapsed, setFaqCollapsed] = useState(false);
+  const [faqCollapsed, setFaqCollapsed] = useState(true);
 
   useEffect(() => {
     if (persona) {
@@ -105,7 +105,7 @@ export default function MentraIntroAndFAQ({ persona }: { persona: string }) {
           <div className="text-sm text-gray-700">
             <button
               onClick={() => setFaqCollapsed(false)}
-              className="bg-white border border-gray-400 px-3 py-1 rounded text-gray-800 hover:bg-gray-100 transition-shadow hover:shadow-sm"
+              className="bg-white border border-gray-400 px-3 py-1 rounded text-red-600 hover:bg-gray-100 transition-shadow hover:shadow-sm font-medium"
             >
               ❔ Show FAQ
             </button>
