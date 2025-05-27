@@ -177,7 +177,15 @@ export default function Home() {
                 </label>
                 <label className="block">
                   <span className="text-sm font-medium">Referral Code *</span>
-                  <input type="text" name="referralCode" required value={referralCode} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded" />
+                  <input
+  type="text"
+  name="referralCode"
+  value={referralCode}
+  readOnly
+  title="This referral code is embedded in your link and cannot be changed."
+  className="mt-1 block w-full border px-3 py-2 rounded bg-gray-100 cursor-not-allowed text-gray-600"
+/>
+<p className="text-xs text-gray-500 mt-1">🔒 This code came from your invitation link and can’t be changed.</p>
                 </label>
                 <label className="block">
                   <span className="text-sm font-medium">Who are you? *</span>
@@ -234,7 +242,15 @@ export default function Home() {
                 </label>
                 <label className="block">
                   <span className="text-sm font-medium">Referral Code</span>
-                  <input type="text" name="referralCode" value={referralCode} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded" />
+                  <input
+  type="text"
+  name="referralCode"
+  value={referralCode}
+  readOnly
+  title="This referral code is embedded in your link and cannot be changed."
+  className="mt-1 block w-full border px-3 py-2 rounded bg-gray-100 cursor-not-allowed text-gray-600"
+/>
+<p className="text-xs text-gray-500 mt-1">🔒 This code came from your invitation link and can’t be changed.</p>
                 </label>
                 <label className="block">
                   <span className="text-sm font-medium">Persona</span>
