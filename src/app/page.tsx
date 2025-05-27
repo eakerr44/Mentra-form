@@ -48,10 +48,11 @@ export default function Home() {
       }
 
       setSubmitted(true);
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const errorMsg = err instanceof Error ? err.message : 'Unknown error';
       console.error("Error submitting form:", err);
-      setError(err.message);
-      alert("Submission error: " + err.message);
+      setError(errorMsg);
+      alert("Submission error: " + errorMsg);
     }
   };
 
