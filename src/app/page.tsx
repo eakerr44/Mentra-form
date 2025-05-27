@@ -85,6 +85,7 @@ export default function Home() {
       setLoading(false);
     }
   };
+
   const allQuestions = () => {
     switch (persona) {
       case "Student (Elementary)":
@@ -133,120 +134,127 @@ export default function Home() {
 
   return (
     <div className="max-w-2xl mx-auto p-6 space-y-6">
-      <h1 className="text-2xl font-bold">Welcome to Mentra Feedback</h1>
-      <p className="text-sm text-muted-foreground">Please complete the form to share your thoughts. This is still in development—your voice helps shape Mentra.</p>
-      {error && <p className="text-red-500 text-sm">Error: {error}</p>}
-
-      {!submitted && !confirming && (
+      {submitted ? (
+        <div className="pt-6 text-center space-y-4">
+          <h2 className="text-2xl font-bold text-green-600">🎉 Thank you for your feedback!</h2>
+          <p className="text-gray-700 text-md">
+            We’ve received your submission and truly appreciate your input.
+          </p>
+          <p className="text-sm text-gray-500">You may now close this tab or return to the home page.</p>
+        </div>
+      ) : (
         <>
-          <div className="space-y-4">
-            <label className="block">
-              <span className="text-sm font-medium">Your Name *</span>
-              <input type="text" name="name" required value={userInfo.name} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded" />
-            </label>
-            <label className="block">
-              <span className="text-sm font-medium">Email *</span>
-              <input type="email" name="email" required value={userInfo.email} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded" />
-            </label>
-            <label className="block">
-              <span className="text-sm font-medium">Referral Code *</span>
-              <input type="text" name="referralCode" required value={referralCode} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded" />
-            </label>
-            <label className="block">
-              <span className="text-sm font-medium">Who are you? *</span>
-              <select name="persona" required value={persona} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded">
-                <option value="">Select...</option>
-                <option value="Student (Elementary)">Student (Elementary)</option>
-                <option value="Student (Middle/High)">Student (Middle/High)</option>
-                <option value="Parent">Parent</option>
-                <option value="Educator">Educator</option>
-              </select>
-              {disclaimer}
-            </label>
-          </div>
+          <h1 className="text-2xl font-bold">Welcome to Mentra Feedback</h1>
+          <p className="text-sm text-muted-foreground">
+            Please complete the form to share your thoughts. This is still in development—your voice helps shape Mentra.
+          </p>
+          {error && <p className="text-red-500 text-sm">Error: {error}</p>}
 
-          {visibleQuestions.length > 0 && (
-            <div className="space-y-6 pt-6">
-              <h2 className="text-lg font-semibold">Your Reflections</h2>
-              {visibleQuestions.map((q) => (
-                <div key={`question-${q.name}`} className="space-y-1">
-                  <label className="block">
-                    <span className="text-sm font-medium">{q.label}</span>
-                    <p className="text-xs text-gray-500 mb-1">{q.tip}</p>
+          {!confirming && (
+            <>
+              <div className="space-y-4">
+                <label className="block">
+                  <span className="text-sm font-medium">Your Name *</span>
+                  <input type="text" name="name" required value={userInfo.name} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded" />
+                </label>
+                <label className="block">
+                  <span className="text-sm font-medium">Email *</span>
+                  <input type="email" name="email" required value={userInfo.email} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded" />
+                </label>
+                <label className="block">
+                  <span className="text-sm font-medium">Referral Code *</span>
+                  <input type="text" name="referralCode" required value={referralCode} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded" />
+                </label>
+                <label className="block">
+                  <span className="text-sm font-medium">Who are you? *</span>
+                  <select name="persona" required value={persona} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded">
+                    <option value="">Select...</option>
+                    <option value="Student (Elementary)">Student (Elementary)</option>
+                    <option value="Student (Middle/High)">Student (Middle/High)</option>
+                    <option value="Parent">Parent</option>
+                    <option value="Educator">Educator</option>
+                  </select>
+                  {disclaimer}
+                </label>
+              </div>
+
+              {visibleQuestions.length > 0 && (
+                <div className="space-y-6 pt-6">
+                  <h2 className="text-lg font-semibold">Your Reflections</h2>
+                  {visibleQuestions.map((q) => (
+                    <div key={`question-${q.name}`} className="space-y-1">
+                      <label className="block">
+                        <span className="text-sm font-medium">{q.label}</span>
+                        <p className="text-xs text-gray-500 mb-1">{q.tip}</p>
+                        <textarea
+                          name={q.name}
+                          value={responses[q.name] || ''}
+                          onChange={handleInputChange}
+                          className="mt-1 block w-full border px-3 py-2 rounded"
+                          rows={2}
+                        />
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <div className="pt-4">
+                <button disabled={loading} onClick={() => setConfirming(true)} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">
+                  {loading ? "Loading..." : "Review My Answers"}
+                </button>
+              </div>
+            </>
+          )}
+
+          {confirming && (
+            <div className="space-y-6">
+              <h2 className="text-lg font-semibold">📝 Review & Edit Your Answers</h2>
+              <div className="space-y-4">
+                <label className="block">
+                  <span className="text-sm font-medium">Your Name</span>
+                  <input type="text" name="name" value={userInfo.name} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded" />
+                </label>
+                <label className="block">
+                  <span className="text-sm font-medium">Email</span>
+                  <input type="email" name="email" value={userInfo.email} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded" />
+                </label>
+                <label className="block">
+                  <span className="text-sm font-medium">Referral Code</span>
+                  <input type="text" name="referralCode" value={referralCode} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded" />
+                </label>
+                <label className="block">
+                  <span className="text-sm font-medium">Persona</span>
+                  <select name="persona" value={persona} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded">
+                    <option value="">Select...</option>
+                    <option value="Student (Elementary)">Student (Elementary)</option>
+                    <option value="Student (Middle/High)">Student (Middle/High)</option>
+                    <option value="Parent">Parent</option>
+                    <option value="Educator">Educator</option>
+                  </select>
+                </label>
+                <hr className="my-4" />
+                {visibleQuestions.map((q) => (
+                  <div key={`confirm-${q.name}`}>
+                    <label className="block text-sm font-medium mb-1">{q.label}</label>
                     <textarea
                       name={q.name}
                       value={responses[q.name] || ''}
-                      onChange={handleInputChange}
-                      className="mt-1 block w-full border px-3 py-2 rounded"
+                      onChange={(e) => handleResponseChange(q.name, e.target.value)}
+                      className="block w-full border px-3 py-2 rounded"
                       rows={2}
                     />
-                  </label>
-                </div>
-              ))}
+                  </div>
+                ))}
+              </div>
+              <div className="pt-4">
+                <button disabled={loading} onClick={handleSubmit} className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded">
+                  {loading ? "Submitting..." : "Submit"}
+                </button>
+                <button onClick={() => setConfirming(false)} className="ml-4 text-gray-700 underline">Back</button>
+              </div>
             </div>
           )}
-          <div className="pt-4">
-            <button disabled={loading} onClick={() => setConfirming(true)} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">
-              {loading ? "Loading..." : "Review My Answers"}
-            </button>
-          </div>
         </>
-      )}
-
-      {confirming && (
-        <div className="space-y-6">
-          <h2 className="text-lg font-semibold">📝 Review & Edit Your Answers</h2>
-          <div className="space-y-4">
-            <label className="block">
-              <span className="text-sm font-medium">Your Name</span>
-              <input type="text" name="name" value={userInfo.name} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded" />
-            </label>
-            <label className="block">
-              <span className="text-sm font-medium">Email</span>
-              <input type="email" name="email" value={userInfo.email} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded" />
-            </label>
-            <label className="block">
-              <span className="text-sm font-medium">Referral Code</span>
-              <input type="text" name="referralCode" value={referralCode} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded" />
-            </label>
-            <label className="block">
-              <span className="text-sm font-medium">Persona</span>
-              <select name="persona" value={persona} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded">
-                <option value="">Select...</option>
-                <option value="Student (Elementary)">Student (Elementary)</option>
-                <option value="Student (Middle/High)">Student (Middle/High)</option>
-                <option value="Parent">Parent</option>
-                <option value="Educator">Educator</option>
-              </select>
-            </label>
-            <hr className="my-4" />
-            {visibleQuestions.map((q) => (
-              <div key={`confirm-${q.name}`}>
-                <label className="block text-sm font-medium mb-1">{q.label}</label>
-                <textarea
-                  name={q.name}
-                  value={responses[q.name] || ''}
-                  onChange={(e) => handleResponseChange(q.name, e.target.value)}
-                  className="block w-full border px-3 py-2 rounded"
-                  rows={2}
-                />
-              </div>
-            ))}
-          </div>
-          <div className="pt-4">
-            <button disabled={loading} onClick={handleSubmit} className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded">
-              {loading ? "Submitting..." : "Submit"}
-            </button>
-            <button onClick={() => setConfirming(false)} className="ml-4 text-gray-700 underline">Back</button>
-          </div>
-        </div>
-      )}
-
-      {submitted && (
-        <div className="pt-6">
-          <h2 className="text-xl font-bold text-green-600">🎉 Thank you!</h2>
-          <p className="text-gray-700">Your feedback has been submitted successfully.</p>
-        </div>
       )}
     </div>
   );
