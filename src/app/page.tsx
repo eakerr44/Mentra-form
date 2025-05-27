@@ -29,37 +29,33 @@ export default function Home() {
     setResponses((prev) => ({ ...prev, [name]: value }));
   };
 
- const handleSubmit = async () => {
-  const formData = {
+const handleSubmit = async () => {
+  const payload = {
     name: userInfo.name,
     email: userInfo.email,
     referralCode,
     persona,
-    responses,
+    responses: JSON.stringify(responses),
   };
 
-  console.log("Submitting form data:", formData);
+  const formData = new URLSearchParams(payload).toString();
 
   try {
     const response = await fetch("https://script.google.com/macros/s/AKfycbwmZ0px1ELger-V5cNGHQkmqV-8RKqUaHzmoGa1Qf82YufKBLX_575ZKNK-31deDi_-VQ/exec", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: formData,
     });
-
-    console.log("Raw response:", response);
 
     const result = await response.json();
 
-    console.log("Parsed result:", result);
-
-    if (!response.ok || result.status === 'error') {
-      throw new Error(result.message || 'Submission failed');
+    if (!response.ok || result.status === "error") {
+      throw new Error(result.message || "Submission failed");
     }
 
     setSubmitted(true);
   } catch (err: unknown) {
-    const errorMsg = err instanceof Error ? err.message : 'Unknown error';
+    const errorMsg = err instanceof Error ? err.message : "Unknown error";
     console.error("Error submitting form:", err);
     setError(errorMsg);
     alert("Submission error: " + errorMsg);
