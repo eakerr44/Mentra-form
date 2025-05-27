@@ -41,8 +41,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     return res.status(200).json(parsed);
-  } catch (err: any) {
-    console.error("🔴 Proxy submission error:", err.message);
-    return res.status(500).json({ status: "error", message: "Internal server error", error: err.message });
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : "Unexpected error";
+    console.error("🔴 Proxy submission error:", errorMessage);
+    return res.status(500).json({ status: "error", message: "Internal server error", error: errorMessage });
   }
 }
