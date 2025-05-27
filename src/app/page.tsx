@@ -52,20 +52,20 @@ export default function Home() {
   const handleSubmit = async () => {
     if (!validateForm()) return;
 
-    const formData = new URLSearchParams({
+    const formData = {
       name: userInfo.name,
       email: userInfo.email,
       referralCode,
       persona,
-      responses: JSON.stringify(responses),
-    }).toString();
+      responses,
+    };
 
     setLoading(true);
     try {
-      const response = await fetch("https://script.google.com/macros/s/AKfycbwmZ0px1ELger-V5cNGHQkmqV-8RKqUaHzmoGa1Qf82YufKBLX_575ZKNK-31deDi_-VQ/exec", {
+      const response = await fetch("/api/submit", {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
 
       const result = await response.json();
