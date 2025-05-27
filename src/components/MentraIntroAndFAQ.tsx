@@ -19,7 +19,7 @@ export default function MentraIntroAndFAQ({ persona }: { persona: string }) {
           <div className="bg-blue-50 border border-blue-200 p-4 rounded-md relative">
             <button
               onClick={() => setIntroCollapsed(true)}
-              className="absolute top-2 right-2 text-sm text-blue-600 hover:underline ml-2"
+              className="absolute top-4 right-4 text-sm text-blue-600 hover:underline"
             >
               Collapse
             </button>
@@ -54,7 +54,7 @@ export default function MentraIntroAndFAQ({ persona }: { persona: string }) {
           <div className="bg-gray-50 border border-gray-200 p-4 rounded-md relative">
             <button
               onClick={() => setFaqCollapsed(true)}
-              className="absolute top-2 right-2 text-sm text-gray-600 hover:underline ml-2"
+              className="absolute top-4 right-4 text-sm text-gray-600 hover:underline"
             >
               Collapse
             </button>
