@@ -25,9 +25,9 @@ export default function MentraIntroAndFAQ({ persona }: { persona: string }) {
             </button>
             <h2 className="text-lg font-semibold text-blue-800">Meet Mentra — Your Partner in Growth</h2>
             <p className="text-sm text-blue-700 mt-2">
-              Mentra is a private space for reflection, growth, and support. Whether you’re learning,
-              teaching, or guiding someone you love, Mentra helps uncover what matters most—
-              without pressure, judgment, or noise.
+           Mentra is a trusted space built for schools to support meaningful student growth. 
+           Whether you're a student building confidence, a teacher guiding learning, or a parent supporting progress, 
+           Mentra helps uncover what matters most — through reflection, resilience, and connection — all without pressure, judgment, or noise.
             </p>
             <p className="text-sm text-blue-700 mt-2 font-medium">
               Built to empower. Designed to listen. Always in your corner.
