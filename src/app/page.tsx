@@ -17,16 +17,14 @@ export default function Home() {
   const [error, setError] = useState<string>('');
 
   useEffect(() => {
-  if (typeof window !== "undefined") {
-    const params = new URLSearchParams(window.location.search);
-    const ref = params.get("ref");
-    if (ref) {
-      setReferralCode(ref);
-    } else {
-      setError("This form requires a referral code. Please use your invitation link or ask whoever sent this to you for help.");
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const ref = params.get("ref");
+      if (ref) {
+        setReferralCode(ref);
+      }
     }
-  }
-}, []);
+  }, []);
 
   const allowedReferralCodes = ["312486", "945201", "228409", "574193", "807612"];
 
@@ -49,7 +47,7 @@ export default function Home() {
 
   const validateForm = () => {
     if (!userInfo.name || !userInfo.email || !referralCode || !persona) {
-      setError("Please fill out all required fields, if your Referral Code is blank please use the invitation link you were provided.");
+      setError("Please fill out all required fields.");
       return false;
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -149,15 +147,7 @@ export default function Home() {
 
   return (
     <div className="max-w-2xl mx-auto p-6 space-y-6">
-      {!referralCode && error && (
-  <div className="text-red-600 bg-red-100 border border-red-300 p-4 rounded">
-    <p className="font-semibold">⚠️ Error</p>
-    <p>{error}</p>
-  </div>
-)}
-{referralCode && (
-  <>
-        <MentraIntroAndFAQ persona={persona} />
+      <MentraIntroAndFAQ persona={persona} />
       {submitted ? (
         <div className="pt-6 text-center space-y-4">
           <h2 className="text-2xl font-bold text-green-600">🎉 Thank you for your feedback!</h2>
