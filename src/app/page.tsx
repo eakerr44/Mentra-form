@@ -6,6 +6,7 @@ import type { ChangeEvent } from "react";
 export default function Home() {
   const [submitted, setSubmitted] = useState(false);
   const [confirming, setConfirming] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [userInfo, setUserInfo] = useState<{ name: string; email: string }>({ name: '', email: '' });
   const [referralCode, setReferralCode] = useState<string>('');
   const [persona, setPersona] = useState<string>('');
@@ -21,7 +22,7 @@ export default function Home() {
     } else if (name === 'persona') {
       setPersona(value);
     } else {
-      setResponses({ ...responses, [name]: value });
+      handleResponseChange(name, value);
     }
   };
 
@@ -29,38 +30,22 @@ export default function Home() {
     setResponses((prev) => ({ ...prev, [name]: value }));
   };
 
-  "use client";
-
-import { useState } from "react";
-import type { ChangeEvent } from "react";
-
-export default function Home() {
-  const [submitted, setSubmitted] = useState(false);
-  const [confirming, setConfirming] = useState(false);
-  const [userInfo, setUserInfo] = useState<{ name: string; email: string }>({ name: '', email: '' });
-  const [referralCode, setReferralCode] = useState<string>('');
-  const [persona, setPersona] = useState<string>('');
-  const [responses, setResponses] = useState<Record<string, string>>({});
-  const [error, setError] = useState<string>('');
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    if (name === 'name' || name === 'email') {
-      setUserInfo({ ...userInfo, [name]: value });
-    } else if (name === 'referralCode') {
-      setReferralCode(value);
-    } else if (name === 'persona') {
-      setPersona(value);
-    } else {
-      setResponses({ ...responses, [name]: value });
+  const validateForm = () => {
+    if (!userInfo.name || !userInfo.email || !referralCode || !persona) {
+      setError("Please fill out all required fields.");
+      return false;
     }
-  };
-
-  const handleResponseChange = (name: string, value: string) => {
-    setResponses((prev) => ({ ...prev, [name]: value }));
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(userInfo.email)) {
+      setError("Please enter a valid email address.");
+      return false;
+    }
+    return true;
   };
 
   const handleSubmit = async () => {
+    if (!validateForm()) return;
+
     const formData = {
       name: userInfo.name,
       email: userInfo.email,
@@ -69,6 +54,7 @@ export default function Home() {
       responses,
     };
 
+    setLoading(true);
     try {
       const response = await fetch("/api/submit", {
         method: "POST",
@@ -77,7 +63,7 @@ export default function Home() {
       });
 
       const result = await response.json();
-      console.log("Server response:", result); // 🔍 Step 1: Log the backend response
+      console.log("Server response:", result);
 
       if (!response.ok || result.status === "error") {
         throw new Error(result.message || "Submission failed");
@@ -89,6 +75,8 @@ export default function Home() {
       console.error("Error submitting form:", err);
       setError(errorMsg);
       alert("Submission error: " + errorMsg);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -132,7 +120,6 @@ export default function Home() {
   };
 
   const visibleQuestions = allQuestions();
-
   const disclaimer = persona === "Student (Elementary)" ? (
     <p className="text-xs text-red-600 mt-2">
       📌 If you are a student in elementary school, please complete this form with the help of a parent or teacher.
@@ -149,20 +136,20 @@ export default function Home() {
         <>
           <div className="space-y-4">
             <label className="block">
-              <span className="text-sm font-medium">Your Name</span>
-              <input type="text" name="name" value={userInfo.name} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded" />
+              <span className="text-sm font-medium">Your Name *</span>
+              <input type="text" name="name" required value={userInfo.name} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded" />
             </label>
             <label className="block">
-              <span className="text-sm font-medium">Email</span>
-              <input type="email" name="email" value={userInfo.email} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded" />
+              <span className="text-sm font-medium">Email *</span>
+              <input type="email" name="email" required value={userInfo.email} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded" />
             </label>
             <label className="block">
-              <span className="text-sm font-medium">Referral Code</span>
-              <input type="text" name="referralCode" value={referralCode} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded" />
+              <span className="text-sm font-medium">Referral Code *</span>
+              <input type="text" name="referralCode" required value={referralCode} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded" />
             </label>
             <label className="block">
-              <span className="text-sm font-medium">Who are you?</span>
-              <select name="persona" value={persona} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded">
+              <span className="text-sm font-medium">Who are you? *</span>
+              <select name="persona" required value={persona} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded">
                 <option value="">Select...</option>
                 <option value="Student (Elementary)">Student (Elementary)</option>
                 <option value="Student (Middle/High)">Student (Middle/High)</option>
@@ -172,11 +159,12 @@ export default function Home() {
               {disclaimer}
             </label>
           </div>
+
           {visibleQuestions.length > 0 && (
             <div className="space-y-6 pt-6">
               <h2 className="text-lg font-semibold">Your Reflections</h2>
               {visibleQuestions.map((q) => (
-                <div key={q.name} className="space-y-1">
+                <div key={`question-${q.name}`} className="space-y-1">
                   <label className="block">
                     <span className="text-sm font-medium">{q.label}</span>
                     <p className="text-xs text-gray-500 mb-1">{q.tip}</p>
@@ -193,7 +181,9 @@ export default function Home() {
             </div>
           )}
           <div className="pt-4">
-            <button onClick={() => setConfirming(true)} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">Review My Answers</button>
+            <button disabled={loading} onClick={() => setConfirming(true)} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">
+              {loading ? "Loading..." : "Review My Answers"}
+            </button>
           </div>
         </>
       )}
@@ -226,7 +216,7 @@ export default function Home() {
             </label>
             <hr className="my-4" />
             {visibleQuestions.map((q) => (
-              <div key={q.name}>
+              <div key={`confirm-${q.name}`}>
                 <label className="block text-sm font-medium mb-1">{q.label}</label>
                 <textarea
                   name={q.name}
@@ -239,7 +229,9 @@ export default function Home() {
             ))}
           </div>
           <div className="pt-4">
-            <button onClick={handleSubmit} className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded">Submit</button>
+            <button disabled={loading} onClick={handleSubmit} className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded">
+              {loading ? "Submitting..." : "Submit"}
+            </button>
             <button onClick={() => setConfirming(false)} className="ml-4 text-gray-700 underline">Back</button>
           </div>
         </div>
