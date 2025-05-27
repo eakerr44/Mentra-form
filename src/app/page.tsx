@@ -10,6 +10,7 @@ export default function Home() {
   const [referralCode, setReferralCode] = useState<string>('');
   const [persona, setPersona] = useState<string>('');
   const [responses, setResponses] = useState<Record<string, string>>({});
+  const [error, setError] = useState<string>('');
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -40,11 +41,17 @@ export default function Home() {
         body: JSON.stringify(formData),
       });
 
-      if (!response.ok) throw new Error("Submission failed");
+      const result = await response.json();
+
+      if (!response.ok || result.status === 'error') {
+        throw new Error(result.message || 'Submission failed');
+      }
 
       setSubmitted(true);
-    } catch (error) {
-      console.error("Error submitting form:", error);
+    } catch (err: any) {
+      console.error("Error submitting form:", err);
+      setError(err.message);
+      alert("Submission error: " + err.message);
     }
   };
 
@@ -152,6 +159,7 @@ export default function Home() {
     <div className="max-w-2xl mx-auto p-6 space-y-6">
       <h1 className="text-2xl font-bold">Welcome to Mentra Feedback</h1>
       <p className="text-sm text-muted-foreground">Please complete the form to share your thoughts. This is still in development—your voice helps shape Mentra.</p>
+      {error && <p className="text-red-500 text-sm">Error: {error}</p>}
       <div className="space-y-4">
         <label className="block">
           <span className="text-sm font-medium">Your Name</span>
