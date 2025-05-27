@@ -25,6 +25,10 @@ export default function Home() {
     }
   };
 
+  const handleResponseChange = (name: string, value: string) => {
+    setResponses((prev) => ({ ...prev, [name]: value }));
+  };
+
   const handleSubmit = async () => {
     const formData = {
       name: userInfo.name,
@@ -163,11 +167,49 @@ export default function Home() {
       )}
 
       {confirming && (
-        <div className="pt-6">
-          <h2 className="text-lg font-semibold">Review & Submit</h2>
-          <pre className="text-sm bg-gray-100 p-4 rounded overflow-x-auto whitespace-pre-wrap">{JSON.stringify({ name: userInfo.name, email: userInfo.email, referralCode, persona, responses }, null, 2)}</pre>
-          <button onClick={handleSubmit} className="mt-4 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded">Submit</button>
-          <button onClick={() => setConfirming(false)} className="ml-4 text-gray-700 underline">Back</button>
+        <div className="space-y-6">
+          <h2 className="text-lg font-semibold">📝 Review & Edit Your Answers</h2>
+          <div className="space-y-4">
+            <label className="block">
+              <span className="text-sm font-medium">Your Name</span>
+              <input type="text" name="name" value={userInfo.name} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded" />
+            </label>
+            <label className="block">
+              <span className="text-sm font-medium">Email</span>
+              <input type="email" name="email" value={userInfo.email} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded" />
+            </label>
+            <label className="block">
+              <span className="text-sm font-medium">Referral Code</span>
+              <input type="text" name="referralCode" value={referralCode} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded" />
+            </label>
+            <label className="block">
+              <span className="text-sm font-medium">Persona</span>
+              <select name="persona" value={persona} onChange={handleInputChange} className="mt-1 block w-full border px-3 py-2 rounded">
+                <option value="">Select...</option>
+                <option value="Student (Elementary)">Student (Elementary)</option>
+                <option value="Student (Middle/High)">Student (Middle/High)</option>
+                <option value="Parent">Parent</option>
+                <option value="Educator">Educator</option>
+              </select>
+            </label>
+            <hr className="my-4" />
+            {visibleQuestions.map((q) => (
+              <div key={q.name}>
+                <label className="block text-sm font-medium mb-1">{q.label}</label>
+                <textarea
+                  name={q.name}
+                  value={responses[q.name] || ''}
+                  onChange={(e) => handleResponseChange(q.name, e.target.value)}
+                  className="block w-full border px-3 py-2 rounded"
+                  rows={2}
+                />
+              </div>
+            ))}
+          </div>
+          <div className="pt-4">
+            <button onClick={handleSubmit} className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded">Submit</button>
+            <button onClick={() => setConfirming(false)} className="ml-4 text-gray-700 underline">Back</button>
+          </div>
         </div>
       )}
 
